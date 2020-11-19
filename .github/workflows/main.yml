@@ -22,12 +22,12 @@ jobs:
         Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
         Expand-Archive -Path sl.zip -DestinationPath .
     - name: Build DnsClient
-      run: dotnet build src/DnsClient
+      run: dotnet build DnsClientDotNet
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
     - name: Analyze with NextGen Static Analysis
-      run: .\sl analyze --app dnsclient --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --csharp --dotnet-core --cpg src/DnsClient/DnsClient.csproj
+      run: .\sl analyze --app dnsclient --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --csharp --dotnet-core --cpg DnsClientDotNet.sln
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
